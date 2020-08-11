@@ -7,12 +7,13 @@
     "mini5-engine": "file:///mnt/c/Users/Neil/Documents/Ubuntu/mini5-engine",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && mv build client && mv client ../mmo-gs",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

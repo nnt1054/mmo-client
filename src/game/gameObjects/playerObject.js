@@ -7,6 +7,7 @@ import {
 } from '../../store/reducers/playerStateSlice'
 import {
 	selectCount,
+	increment,
 } from '../../store/reducers/counterSlice'
 
 class playerObject extends GameObject {
@@ -38,6 +39,12 @@ class playerObject extends GameObject {
   		this.count = 0;
   		const handleCountListener = this.handleCountUpdate.bind(this);
   		this.countUnsubscribe = store.subscribe(handleCountListener);
+
+  		this.inputState = {
+  			xState: 'idle',
+  			yState: 'idle',
+  		};
+  		this.sendUpdate = false;
 	}
 
 	handleCountUpdate() {
@@ -53,19 +60,57 @@ class playerObject extends GameObject {
 			xDisp = 0,
 			yDisp = 0;
 
+		// need to sync this.gameState = {
+		// 	state: 'jumping',
+		// 	x: x,
+		// 	y: y,
+		// }
+		// at what point do I uhhh uhhhhhhhhhhh
+		// 1. detect client prediction new state based on input
+		// 2. emit either input OR new game state? we can make an 'inputState' function
+			// 2.1 what do i want to send to the server? the idea is to send input state that calculates the next state?
+			// 2.2 uh send something along the lines of "movingLeft" or "movingRight", also "jumping"
+		// 3. process server.gameState and double check if need to resync
+			// 3.1 you can find this state in uh this.scene.gameState['playermanager'][this.scene.engine.username]
+
+		var prev_xState = this.inputState.xState;
+		// Client Side Input Processing
 		if (a in this.scene.engine.keyState && d in this.scene.engine.keyState) {
+			this.inputState.xState = 'idle';
 			xDisp = 0;
 		} else if (a in this.scene.engine.keyState) {
+			this.inputState.xState = 'movingLeft';
 			xDisp = -this.xVel;
 		} else if (d in this.scene.engine.keyState) {
+			this.inputState.xState = 'movingRight';
 			xDisp = this.xVel;
+		} else {
+			this.inputState.xState = 'idle';
 		}
+		if (prev_xState != this.inputState.xState) {
+			this.sendUpdate = true;
+		}
+
 		if (space in this.scene.engine.keyState) {
 			if (this.jumpTimer <= 0) {
+				this.sendUpdate = true;
+				this.inputState.yState = 'jumping';
 				this.yVel = this.jump;
 				this.jumpTimer = 1000;
 			}
+		} else {
+			if (this.inputState.yState != 'idle') {
+				this.sendUpdate = true;
+			}
+			this.inputState.yState = 'idle';
 		}
+
+		this.timer += delta
+		if (this.timer > 1000) {
+			this.timer = 0;
+			console.log(delta, this.inputState);
+		}
+
 		this.jumpTimer -= delta;
 
 		if (this.yVel) {
@@ -94,14 +139,22 @@ class playerObject extends GameObject {
 		var collisions = this.AABB.checkCollisions(this.scene.portalObjects);
 		if (collisions.length > 0) {
 			for (var i = 0; i < collisions.length; i++) {
-	            this.scene.engine.switchScene(collisions[i].parent.nextScene);
+	            this.scene.switchScene(collisions[i].parent.nextScene);
 			}
 		}
-
 
 		this.count = this.newCount;
 		store.dispatch(setPlayerState(this.state));
 		store.dispatch(setPlayerPosition([ Math.round(this.x), Math.round(this.y)]));
+		store.dispatch(increment());
+
+		if (this.sendUpdate) {
+			// send stuff socket
+			setTimeout(()=>this.scene.engine.socket.emit('inputState', this.inputState), 100);
+			// console.log(this.inputState);
+			this.sendUpdate = false;
+		}
+
 	}
 
 	// Resolves and sets AABB position based on colliding aabb, x-axis displacement, and y axis-displacement
@@ -149,7 +202,7 @@ class playerObject extends GameObject {
         this.scene.engine.context.fillStyle = "black";
 		this.scene.engine.context.textAlign = "center";
         this.scene.engine.context.font = "30px Comic Sans MS";
-        this.scene.engine.context.fillText(this.count.toString(), this.AABB.min.x + this.AABB.width/2, this.AABB.min.y - 10);
+        this.scene.engine.context.fillText("THIS IS ME", this.AABB.min.x + this.AABB.width/2, this.AABB.min.y - 10);
 	}
 }
 

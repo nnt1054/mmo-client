@@ -4,8 +4,8 @@ class portalObject extends GameObject {
 
 	constructor(scene, nextScene, width, height, x, y) {
 	    super(scene)
-      	this.scene = scene;
-      	this.nextScene = nextScene;
+      this.scene = scene;
+      this.nextScene = nextScene;
   		this.update = this.update.bind(this);
   		this.draw = this.draw.bind(this);
   		this.AABB = this.createAABB(width, height, x, y, this)
@@ -14,11 +14,11 @@ class portalObject extends GameObject {
 	}
 
 	update(delta) {
-        this.allowClickDetection(this.clickAABB);
+        // this.allowClickDetection(this.clickAABB);
 
-        if (this.isClicked()) {
-            this.scene.engine.switchScene(this.nextScene);
-        }
+        // if (this.isClicked()) {
+        //     this.scene.switchScene(this.nextScene);
+        // }
 	}
 
 	draw(interpolationPercentage) {
