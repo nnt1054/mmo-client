@@ -10,7 +10,11 @@ import Game from './game/main'
 
 var username = prompt("Please enter your name", "Harry Potter");
 
-const socket = io('http://localhost:8000', {query:'name=' + username});
+// const socket = io('http://localhost:8080', {query:'name=' + username});
+var socket = io(window.location.origin, {
+  path: window.location.pathname + 'socket.io',
+  query:'name=' + username,
+});
 
 socket.on('connect', () => {
 	console.log(socket.id);

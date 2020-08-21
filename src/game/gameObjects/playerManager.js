@@ -1,7 +1,6 @@
 import { GameObject } from 'mini5-engine';
 import { default as otherPlayerObject } from './otherPlayerObject'
 
-
 class playerManagerObject extends GameObject {
 
 	constructor(scene) {

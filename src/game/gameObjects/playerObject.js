@@ -149,14 +149,14 @@ class playerObject extends GameObject {
 		store.dispatch(increment());
 
 		if (this.sendUpdate) {
-			// send stuff socket
-			setTimeout(()=>this.scene.engine.socket.emit('inputState', this.inputState), 100);
-			// console.log(this.inputState);
+			this.scene.engine.socket.emit('inputState', this.inputState);
+			// // send stuff socket
+			// setTimeout(()=>this.scene.engine.socket.emit('inputState', this.inputState), 100);
+			// // console.log(this.inputState);
 			this.sendUpdate = false;
 		}
 
 	}
-
 	// Resolves and sets AABB position based on colliding aabb, x-axis displacement, and y axis-displacement
 	handleCollision(aabb, xDisp, yDisp) {
 		if (xDisp > yDisp) {
