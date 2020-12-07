@@ -15,7 +15,7 @@ class otherPlayerObject extends GameObject {
 	constructor(scene, username, parent) {
 	    super(scene, parent)
 	    this.username = username;
-      	this.scene = scene;
+      this.scene = scene;
   		this.update = this.update.bind(this);
   		this.draw = this.draw.bind(this);
 
@@ -35,6 +35,8 @@ class otherPlayerObject extends GameObject {
   			'walking': 'yellow',
   			'idle': 'blue',
   		}
+      this.gameState = this.parent.gameState[this.username];
+
 
   		console.log('connecting: ' + username);
 	}

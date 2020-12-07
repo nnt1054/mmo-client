@@ -4,17 +4,33 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
-    "mini5-engine": "file:///mnt/c/Users/Neil/Documents/Ubuntu/mini5-engine",
+    "mini5-engine": "file:../mini5-engine",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "0.9.5",
+    "react-redux": "^7.2.1",
     "socket.io-client": "^2.3.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "react-scripts": "3.4.3"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build client && mv client ../mmo-gs",
+    "build": "react-scripts build",
+    "export": "mv build client-build && rm -r ../mmo-gs/client-build && mv client-build ../mmo-gs/",
+    "export2": "mv build client-build && rm -r ../mmo-server-manager/client-build && mv client-build ../mmo-server-manager/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -137,10 +137,15 @@ class playerObject extends GameObject {
 
 		// Resolve Portal Collisions
 		var collisions = this.AABB.checkCollisions(this.scene.portalObjects);
+		var nextScene = null;
 		if (collisions.length > 0) {
 			for (var i = 0; i < collisions.length; i++) {
-	            this.scene.switchScene(collisions[i].parent.nextScene);
+	            nextScene = collisions[i].parent.nextScene
 			}
+		}
+		if (nextScene != null) {
+	        // this.scene.switchScene(nextScene);
+	        console.log("should switch to scene: " + nextScene);
 		}
 
 		this.count = this.newCount;
