@@ -16,8 +16,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "export": "mv build client-build && rm -r ../mmo-gs/client-build && mv client-build ../mmo-gs/",
-    "export2": "mv build client-build && rm -r ../mmo-server-manager/client-build && mv client-build ../mmo-server-manager/",
+    "export": "mv build client-build && rm -r ../mmo-server-manager/client-build && mv client-build ../mmo-server-manager/",
+    "export2": "mv build client-build && rm -r ../mmo-gs/client-build && mv client-build ../mmo-gs/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

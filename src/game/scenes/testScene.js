@@ -1,6 +1,5 @@
-import { Scene } from 'mini5-engine';
+import baseScene
 
-// import gameObjects
 import { 
 	backgroundObject,
 	blockObject,
@@ -10,7 +9,7 @@ import {
 	playerManagerObject
 } from '../gameObjects/'
 
-class testScene extends Scene {
+class testScene extends baseScene {
 
 	setup(args) {
 

@@ -30,17 +30,14 @@ async function main() {
   );
 }
 
+// PERSISTENT WEB SOCKET FUNCTIONS
+// ... or all web socket functions?
+// whatever doesn't need to be cleared between client connections
+
 // returns socket object
 async function setup_websocket(url, username) {
   let response = await fetch(url);
   let data = await response.json();
-
-  // let socket = await io('http://localhost:8080', {query:'name=' + username});
-  // console.log(socket);
-  // var socket = io(window.location.origin, {
-  //   path: window.location.pathname + 'socket.io',
-  //   query:"name=" + username,
-  // });
 
   console.log(data.pathname)
   let socket = await io(data.origin, {
@@ -56,8 +53,18 @@ async function setup_websocket(url, username) {
     console.log(data);
   });
 
-  socket.on('teleport', (data) => {
-    console.log(data);
+  // Things that interact with the scene can just be in base_scene class
+
+  socket.on('playerTeleportStart', (data) => {
+    // switch scene to transition scene
+    // data includes which scene to switch to for preloading/transition data
+  })
+
+  socket.on('playerTeleportDestination', (data) => {
+    // data includes dest servers scene_name, origin, path to establish ws connection
+    // check if player in transition scene state
+    // send websocket connection request with server
+    // call connectToServer on new websocket(?)
   })
 
   return socket
