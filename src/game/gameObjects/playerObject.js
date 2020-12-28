@@ -26,6 +26,7 @@ class playerObject extends GameObject {
   		this.gravity = 0.005;
   		this.jump = -1.5;
   		this.jumpTimer = 0;
+  		this.jumpDelay = 1000;
   		this.AABB = this.createAABB(64, 64, this.x, this.y)
 
   		this.state = 'idle';
@@ -40,10 +41,7 @@ class playerObject extends GameObject {
   		const handleCountListener = this.handleCountUpdate.bind(this);
   		this.countUnsubscribe = store.subscribe(handleCountListener);
 
-  		this.inputState = {
-  			xState: 'idle',
-  			yState: 'idle',
-  		};
+  		this.inputState = this.scene.inputManager.inputState;
   		this.sendUpdate = false;
 	}
 
@@ -60,57 +58,26 @@ class playerObject extends GameObject {
 			xDisp = 0,
 			yDisp = 0;
 
-		// need to sync this.gameState = {
-		// 	state: 'jumping',
-		// 	x: x,
-		// 	y: y,
-		// }
-		// at what point do I uhhh uhhhhhhhhhhh
-		// 1. detect client prediction new state based on input
-		// 2. emit either input OR new game state? we can make an 'inputState' function
-			// 2.1 what do i want to send to the server? the idea is to send input state that calculates the next state?
-			// 2.2 uh send something along the lines of "movingLeft" or "movingRight", also "jumping"
-		// 3. process server.gameState and double check if need to resync
-			// 3.1 you can find this state in uh this.scene.gameState['playermanager'][this.scene.engine.username]
-
-		var prev_xState = this.inputState.xState;
-		// Client Side Input Processing
-		if (a in this.scene.engine.keyState && d in this.scene.engine.keyState) {
-			this.inputState.xState = 'idle';
-			xDisp = 0;
-		} else if (a in this.scene.engine.keyState) {
-			this.inputState.xState = 'movingLeft';
-			xDisp = -this.xVel;
-		} else if (d in this.scene.engine.keyState) {
-			this.inputState.xState = 'movingRight';
-			xDisp = this.xVel;
-		} else {
-			this.inputState.xState = 'idle';
-		}
-		if (prev_xState != this.inputState.xState) {
-			this.sendUpdate = true;
+		switch (this.inputState.xState) {
+			case 'idle':
+				xDisp = 0;
+				break;
+			case 'movingLeft':
+				xDisp = -this.xVel;
+				break;
+			case 'movingRight':
+				xDisp = this.xVel;
+				break;
 		}
 
-		if (space in this.scene.engine.keyState) {
-			if (this.jumpTimer <= 0) {
-				this.sendUpdate = true;
-				this.inputState.yState = 'jumping';
-				this.yVel = this.jump;
-				this.jumpTimer = 1000;
-			}
-		} else {
-			if (this.inputState.yState != 'idle') {
-				this.sendUpdate = true;
-			}
-			this.inputState.yState = 'idle';
+		switch (this.inputState.yState) {
+			case 'jumping':
+				if (this.jumpTimer <= 0) {
+					this.yVel = this.jump;
+					this.jumpTimer = this.jumpDelay;
+				}
+				break;
 		}
-
-		this.timer += delta
-		if (this.timer > 1000) {
-			this.timer = 0;
-			console.log(delta, this.inputState);
-		}
-
 		this.jumpTimer -= delta;
 
 		if (this.yVel) {
@@ -153,7 +120,7 @@ class playerObject extends GameObject {
 		store.dispatch(setPlayerPosition([ Math.round(this.x), Math.round(this.y)]));
 		store.dispatch(increment());
 
-		if (this.sendUpdate) {
+		if (this.sendUpdate && this.scene.engine === 'client') {
 			this.scene.engine.socket.emit('inputState', this.inputState);
 			// // send stuff socket
 			// setTimeout(()=>this.scene.engine.socket.emit('inputState', this.inputState), 100);

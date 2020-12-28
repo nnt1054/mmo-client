@@ -6,18 +6,26 @@ import store from './store/store';
 import { Provider } from 'react-redux';
 import io from 'socket.io-client';
 import Game from './game/main'
-// import { Engine, Scene, GameObject } from 'mini5-engine';
+
+const MODE_LOCAL = 'local';
+const MODE_CLIENT = 'client';
 
 async function main() { 
-  let starting_scene = 'area01';
-  let url = 'http://localhost:8081/gameserver?scene=' + starting_scene;
+  console.log(process.env.REACT_APP_MODE);
 
-  let username = await prompt("Please enter your name", "Harry Potter");
-  let socket = await setup_websocket(url, username);
+  let starting_scene = 'testScene';
 
   Game.forceSwitchScene(starting_scene, {});
-  Game.username = username;
-  Game.addSocket(socket);
+  Game.global.username = "Neil :)"
+
+  if (process.env.REACT_APP_MODE === MODE_CLIENT) {
+    let username = await prompt("Please enter your name", "Harry Potter");
+    let url = 'http://localhost:8081/gameserver?scene=' + starting_scene;
+    let socket = await setup_websocket(url, username);
+    Game.global.socket = socket;
+    Game.currentScene.updateSocket();
+  }
+
   Game.start();
 
   ReactDOM.render(

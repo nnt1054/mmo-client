@@ -1,25 +1,27 @@
-import baseScene
-
-import { 
+import baseScene from './baseScene';
+import {
 	backgroundObject,
 	blockObject,
 	playerObject,
 	portalObject,
 	bouncingBallObject,
-	playerManagerObject
+	playerManagerObject,
+	inputManagerObject
 } from '../gameObjects/'
 
 class testScene extends baseScene {
 
 	setup(args) {
+		super.setup(args);
 
 	    // instantiate game objects
 	    var background = new backgroundObject(this);
 	    var ground = new blockObject(this, 800*2, 32, -800, 400 - 32);
 	    var floating = new blockObject(this, 800/2, 32, 800/2, 400/2);
-	    // var portalToArea01 = new portalObject(this, 'area01', 80, 100, 700, 100)
 	    var ball = new bouncingBallObject(this, 'blue');
 	    var player = new playerObject(this);
+
+	    // instantiate Manager objects
 	    var playerManager = new playerManagerObject(this);
 
 	    // create layers
@@ -36,14 +38,6 @@ class testScene extends baseScene {
 
 	    // add initial game objects
 	    this.gameObjects = [background, player, ball, playerManager];
-
-	}
-
-	updateSocket() {
-		this.engine.socket.on('gamestate', (data) => {
-			this.gameState = data;
-			// console.log(this.gameState);
-		})
 	}
 
 }

@@ -16,9 +16,6 @@ class playerManagerObject extends GameObject {
 	update(delta) {
 		this.gameState = this.parent.gameState['playerManager']
 		for (var name in this.gameState) {
-			// if (name == this.scene.engine.username) {
-			// 	continue
-			// } else if (name in this.connectedPlayers) {
 			if (name in this.connectedPlayers) {
 				this.connectedPlayers[name].update(delta);
 			} else {
@@ -29,9 +26,7 @@ class playerManagerObject extends GameObject {
 
 	draw(interpolationPercentage) {
 		for (var name in this.gameState) {
-			// if (name == this.scene.engine.username) {
-			// 	continue
-			// } else if (name in this.connectedPlayers) {
+
 			if (name in this.connectedPlayers) {
 				this.connectedPlayers[name].draw(interpolationPercentage);
 			}

@@ -58,7 +58,7 @@ class otherPlayerObject extends GameObject {
         this.scene.engine.context.fillStyle = this.colors[this.state];
         this.scene.engine.context.fillRect(this.AABB.min.x, this.AABB.min.y, this.AABB.width, this.AABB.height);
         this.scene.engine.context.fillStyle = "black";
-		this.scene.engine.context.textAlign = "center";
+		    this.scene.engine.context.textAlign = "center";
         this.scene.engine.context.font = "30px Comic Sans MS";
         this.scene.engine.context.fillText(this.username, this.AABB.min.x + this.AABB.width/2, this.AABB.min.y - 10);
 	}
