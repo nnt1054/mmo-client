@@ -19,8 +19,11 @@ class baseScene extends Scene {
 		console.log('updated socket!');
 		this.engine.global.socket.on('gamestate', (data) => {
 			this.gameState = data;
-			console.log(this.gameState);
 		})
+	}
+
+	sceneFadeOut() {
+		console.log('fading out');
 	}
 
 }

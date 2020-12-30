@@ -51,7 +51,6 @@ class otherPlayerObject extends GameObject {
 	}
 
 	draw(interpolationPercentage) {
-		console.log('drawing?');
         if (!this.gameState.connected) {
         	return;
         }

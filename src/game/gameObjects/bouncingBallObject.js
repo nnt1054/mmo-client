@@ -34,7 +34,6 @@ class bouncingBallObject extends GameObject {
                 this.velocity = -this.velocity;
             }
         } else {
-            console.log('sync!');
             this.lastUpdate = this.gameState.y;
             this.posAABB.setPos(this.gameState.x, this.gameState.y);
         }

@@ -16,16 +16,17 @@ async function main() {
   let starting_scene = 'testScene';
 
   Game.forceSwitchScene(starting_scene, {});
-  Game.global.username = "Neil :)"
+  let username = 'neil';
 
   if (process.env.REACT_APP_MODE === MODE_CLIENT) {
-    let username = await prompt("Please enter your name", "Harry Potter");
+    username = await prompt("Please enter your name", "Harry Potter");
     let url = 'http://localhost:8081/gameserver?scene=' + starting_scene;
-    let socket = await setup_websocket(url, username);
+    let socket = await setup_websocket(Game, url, username);
     Game.global.socket = socket;
     Game.currentScene.updateSocket();
   }
 
+  Game.global.username = username;
   Game.start();
 
   ReactDOM.render(
@@ -43,7 +44,7 @@ async function main() {
 // whatever doesn't need to be cleared between client connections
 
 // returns socket object
-async function setup_websocket(url, username) {
+async function setup_websocket(game, url, username) {
   let response = await fetch(url);
   let data = await response.json();
 
@@ -62,19 +63,35 @@ async function setup_websocket(url, username) {
   });
 
   // Things that interact with the scene can just be in base_scene class
-
   socket.on('playerTeleportStart', (data) => {
     // switch scene to transition scene
+    game.currentScene.sceneFadeOut();
     // data includes which scene to switch to for preloading/transition data
+    game.global.nextScene = data.scene_name;
+    game.global.state = 'transitioning'
+    console.log(data);    
   })
 
-  socket.on('playerTeleportDestination', (data) => {
+  socket.on('playerTeleportDestination', async (data) => {
+    if (game.global.state != 'transitioning') {
+      return;
+    }
     // data includes dest servers scene_name, origin, path to establish ws connection
     // check if player in transition scene state
     // send websocket connection request with server
     // call connectToServer on new websocket(?)
+    // let newSocket = await setup_websocket(game, data.url, game.global.username);
+    let tempUrl = 'http://localhost:8081/gameserver?scene=' + game.global.nextScene;
+    let newSocket = await setup_websocket(game, tempUrl, game.global.username);
+    game.forceSwitchScene(game.global.nextScene, {});
+    game.global.oldSocket = game.global.socket;
+    game.global.socket = newSocket;
+    game.currentScene.updateSocket();
+    game.global.oldSocket.close();
   })
 
+  console.log('new socket!');
+  console.log(socket);
   return socket
 }
 
