@@ -7,6 +7,7 @@ import {
 class baseScene extends Scene {
 
 	setup(args) {
+		this.scaled = false;
 		this.inputManager = new inputManagerObject(this);
 	}
 
@@ -24,6 +25,18 @@ class baseScene extends Scene {
 
 	sceneFadeOut() {
 		console.log('fading out');
+	}
+
+	draw(interpolationPercentage) {
+		// if (!this.scaled) {
+		// 	this.engine.context.scale(1.1, 1.1);
+		// 	this.canvas.width = window.innerWidth;
+		// 	this.canvas.height = window.innerHeight;
+		// 	this.scaled = true;
+		// }
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+		super.draw(interpolationPercentage);
 	}
 
 }

@@ -9,7 +9,7 @@ import {
 	inputManagerObject
 } from '../gameObjects/'
 
-class testScene extends baseScene {
+class area02Scene extends baseScene {
 
 	setup(args) {
 		super.setup(args);
@@ -17,12 +17,11 @@ class testScene extends baseScene {
 	    // instantiate game objects
 	    var background = new backgroundObject(this);
 	    var ground = new blockObject(this, 800*3, 32, -800, 400 - 32);
-	    var floating = new blockObject(this, 800/2, 32, 32, 400/2);
+	    var floating = new blockObject(this, 800/2, 32, 800, 400/2);
 	    var ball = new bouncingBallObject(this, 'blue');
 	    var player = new playerObject(this, 200, 296);
-	   	var leftPortal = new portalObject(this, 'area02Scene', 96, 128, 64, 240);
-	    var rightPortal = new portalObject(this, 'area01Scene', 96, 128, 960, 240);
-
+	   	var leftPortal = new portalObject(this, 'area01Scene', 96, 128, 64, 240);
+	    var rightPortal = new portalObject(this, 'testScene', 96, 128, 960, 240);
 
 	    // instantiate Manager objects
 	    var playerManager = new playerManagerObject(this);
@@ -31,13 +30,13 @@ class testScene extends baseScene {
 	    this.layerOrder = ['layer1', 'layer2', 'layer3'];
 	    this.layers = {
 	    	'layer1': [background],
-	    	'layer2': [ground, floating, ball, rightPortal],
+	    	'layer2': [ground, floating, ball, leftPortal],
 	    	'layer3': [player, playerManager],
 	    }
 
 	    // create collision tag lists
 	    this.staticObjects = [ground.AABB, floating.AABB];
-	    this.portalObjects = [rightPortal.AABB];
+	    this.portalObjects = [leftPortal.AABB];
 
 	    // add initial game objects
 	    this.gameObjects = [background, player, ball, playerManager];
@@ -45,4 +44,4 @@ class testScene extends baseScene {
 
 }
 
-export default testScene;
+export default area02Scene;

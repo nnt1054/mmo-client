@@ -4,7 +4,7 @@ class backgroundObject extends GameObject {
 
     constructor(scene) {
         super(scene)
-		this.parent.gameState['backgroundObject01'] = {}
+		    this.parent.gameState['backgroundObject01'] = {}
         this.gameState = this.parent.gameState['backgroundObject01'];
         this.gameState = {x: 0, y: 1};
     }
@@ -14,7 +14,7 @@ class backgroundObject extends GameObject {
 
   	draw(interpolationPercentage) {
         this.scene.engine.context.fillStyle = 'lightgreen';
-        this.scene.engine.context.fillRect(0, 0, this.scene.engine.canvas.width, this.scene.engine.canvas.height);
+        this.scene.engine.context.fillRect(0, 0, this.scene.canvas.width, this.scene.canvas.height);
   	}
 
 }

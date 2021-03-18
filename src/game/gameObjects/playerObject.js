@@ -10,16 +10,18 @@ import {
 	increment,
 } from '../../store/reducers/counterSlice'
 
+const MODE_LOCAL = 'local'
+
 class playerObject extends GameObject {
 
-	constructor(scene) {
+	constructor(scene, x, y) {
 	    super(scene)
       	this.scene = scene;
   		this.update = this.update.bind(this);
   		this.draw = this.draw.bind(this);
 
-  		this.x = 64;
-  		this.y = 0;
+  		this.x = x;
+  		this.y = y;
 
   		this.xVel = 10;
   		this.yVel = 0;
@@ -113,6 +115,10 @@ class playerObject extends GameObject {
 		if (nextScene != null) {
 	        // this.scene.switchScene(nextScene);
 	        console.log("should switch to scene: " + nextScene);
+	        if (this.scene.engine.mode == MODE_LOCAL) {
+	        	this.scene.switchScene(nextScene)
+	        }
+
 		}
 
 		this.count = this.newCount;

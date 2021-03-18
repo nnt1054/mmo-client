@@ -2,6 +2,7 @@
   "name": "mmo-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/play",
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "mini5-engine": "file:../mini5-engine",
@@ -19,6 +20,7 @@
     "build": "REACT_APP_MODE=client react-scripts build",
     "export": "mv build client-build && rm -r ../mmo-server-manager/client-build && mv client-build ../mmo-server-manager/",
     "export2": "mv build client-build && rm -r ../mmo-gs/client-build && mv client-build ../mmo-gs/",
+    "export3": "mv build client-build && rm -r ../gateway/src/client-build && mv client-build ../gateway/src/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
