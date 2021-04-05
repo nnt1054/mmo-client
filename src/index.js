@@ -20,7 +20,7 @@ async function main() {
 
   if (process.env.REACT_APP_MODE === MODE_CLIENT) {
     username = await prompt("Please enter your name", "Harry Potter");
-    let url = 'http://localhost:8081/gameserver?scene=' + starting_scene;
+    let url = 'http://localhost:3000/manager/gameserver?scene=' + starting_scene;
     let socket = await setup_websocket(Game, url, username);
     Game.global.socket = socket;
     Game.currentScene.updateSocket();
@@ -48,14 +48,14 @@ async function setup_websocket(game, url, username) {
   let response = await fetch(url);
   let data = await response.json();
 
-  console.log(data.pathname)
+  console.log(data);
   let socket = await io(data.origin, {
     path: data.pathname,
     query:"name=" + username,
   });
 
   socket.on('connect', () => {
-    console.log(this);
+    console.log('connected!');
   });
 
   socket.on('heartbeat', (data) => {
@@ -81,7 +81,7 @@ async function setup_websocket(game, url, username) {
     // send websocket connection request with server
     // call connectToServer on new websocket(?)
     // let newSocket = await setup_websocket(game, data.url, game.global.username);
-    let tempUrl = 'http://localhost:8081/gameserver?scene=' + game.global.nextScene;
+    let tempUrl = 'http://localhost:3000/manager/gameserver?scene=' + game.global.nextScene;
     let newSocket = await setup_websocket(game, tempUrl, game.global.username);
     game.forceSwitchScene(game.global.nextScene, {});
     game.global.oldSocket = game.global.socket;
@@ -90,8 +90,6 @@ async function setup_websocket(game, url, username) {
     game.global.oldSocket.close();
   })
 
-  console.log('new socket!');
-  console.log(socket);
   return socket
 }
 

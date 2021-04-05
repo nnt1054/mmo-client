@@ -23,7 +23,6 @@ class testScene extends baseScene {
 	   	var leftPortal = new portalObject(this, 'area02Scene', 96, 128, 64, 240);
 	    var rightPortal = new portalObject(this, 'area01Scene', 96, 128, 960, 240);
 
-
 	    // instantiate Manager objects
 	    var playerManager = new playerManagerObject(this);
 
