@@ -7,9 +7,6 @@ import { Provider } from 'react-redux';
 import io from 'socket.io-client';
 import Game from './game/main'
 
-const MODE_LOCAL = 'local';
-const MODE_CLIENT = 'client';
-
 async function main() { 
   console.log(process.env.REACT_APP_MODE);
 
@@ -18,15 +15,15 @@ async function main() {
   Game.forceSwitchScene(starting_scene, {});
   let username = 'neil';
 
-  if (process.env.REACT_APP_MODE === MODE_CLIENT) {
+  if (process.env.REACT_APP_MODE === Game.MODE_CLIENT) {
     username = await prompt("Please enter your name", "Harry Potter");
     let url = 'http://localhost:3000/manager/gameserver?scene=' + starting_scene;
     let socket = await setup_websocket(Game, url, username);
-    Game.global.socket = socket;
+    Game.locals.socket = socket;
     Game.currentScene.updateSocket();
   }
 
-  Game.global.username = username;
+  Game.locals.username = username;
   Game.start();
 
   ReactDOM.render(
@@ -67,27 +64,27 @@ async function setup_websocket(game, url, username) {
     // switch scene to transition scene
     game.currentScene.sceneFadeOut();
     // data includes which scene to switch to for preloading/transition data
-    game.global.nextScene = data.scene_name;
-    game.global.state = 'transitioning'
+    game.locals.nextScene = data.scene_name;
+    game.locals.state = 'transitioning'
     console.log(data);    
   })
 
   socket.on('playerTeleportDestination', async (data) => {
-    if (game.global.state != 'transitioning') {
+    if (game.locals.state != 'transitioning') {
       return;
     }
     // data includes dest servers scene_name, origin, path to establish ws connection
     // check if player in transition scene state
     // send websocket connection request with server
     // call connectToServer on new websocket(?)
-    // let newSocket = await setup_websocket(game, data.url, game.global.username);
-    let tempUrl = 'http://localhost:3000/manager/gameserver?scene=' + game.global.nextScene;
-    let newSocket = await setup_websocket(game, tempUrl, game.global.username);
-    game.forceSwitchScene(game.global.nextScene, {});
-    game.global.oldSocket = game.global.socket;
-    game.global.socket = newSocket;
+    // let newSocket = await setup_websocket(game, data.url, game.locals.username);
+    let tempUrl = 'http://localhost:3000/manager/gameserver?scene=' + game.locals.nextScene;
+    let newSocket = await setup_websocket(game, tempUrl, game.locals.username);
+    game.forceSwitchScene(game.locals.nextScene, {});
+    game.locals.oldSocket = game.locals.socket;
+    game.locals.socket = newSocket;
     game.currentScene.updateSocket();
-    game.global.oldSocket.close();
+    game.locals.oldSocket.close();
   })
 
   return socket

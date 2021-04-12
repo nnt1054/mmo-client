@@ -18,7 +18,7 @@ class baseScene extends Scene {
 
 	updateSocket() {
 		console.log('updated socket!');
-		this.engine.global.socket.on('gamestate', (data) => {
+		this.engine.locals.socket.on('gamestate', (data) => {
 			this.gameState = data;
 		})
 	}

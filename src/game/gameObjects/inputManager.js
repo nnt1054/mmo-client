@@ -47,7 +47,7 @@ class inputManagerObject extends GameObject {
 
 		// Send Updates to Server
 		if (this.sendUpdate && this.scene.engine.mode === 'client') {
-			this.scene.engine.global.socket.emit('inputState', this.inputState);
+			this.scene.engine.locals.socket.emit('inputState', this.inputState);
 			this.sendUpdate = false;
 		}
 
