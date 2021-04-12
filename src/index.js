@@ -15,14 +15,11 @@ async function main() {
   Game.forceSwitchScene(starting_scene, {});
   let username = 'neil';
 
-  if (process.env.REACT_APP_MODE === Game.MODE_CLIENT) {
-    username = await prompt("Please enter your name", "Harry Potter");
-    let url = 'http://localhost:3000/manager/gameserver?scene=' + starting_scene;
-    let socket = await setup_websocket(Game, url, username);
-    Game.locals.socket = socket;
-    Game.currentScene.updateSocket();
-  }
-
+  username = await prompt("Please enter your name", "Harry Potter");
+  let url = 'http://localhost:3000/manager/gameserver?scene=' + starting_scene;
+  let socket = await setup_websocket(Game, url, username);
+  Game.locals.socket = socket;
+  Game.currentScene.updateSocket();
   Game.locals.username = username;
   Game.start();
 

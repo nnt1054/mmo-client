@@ -127,10 +127,7 @@ class playerObject extends GameObject {
 		store.dispatch(increment());
 
 		if (this.sendUpdate && this.scene.engine === 'client') {
-			this.scene.engine.socket.emit('inputState', this.inputState);
-			// // send stuff socket
-			// setTimeout(()=>this.scene.engine.socket.emit('inputState', this.inputState), 100);
-			// // console.log(this.inputState);
+			this.scene.engine.locals.socket.emit('inputState', this.inputState);
 			this.sendUpdate = false;
 		}
 
