@@ -87,7 +87,4 @@ async function setup_websocket(game, url, username) {
   return socket
 }
 
-async function new_websocket(url, username) {
-}
-
 main();

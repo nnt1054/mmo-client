@@ -19,7 +19,11 @@ class baseScene extends Scene {
 	updateSocket() {
 		console.log('updated socket!');
 		this.engine.locals.socket.on('gamestate', (data) => {
+			console.log(data)
 			this.gameState = data;
+		})
+		this.engine.locals.socket.on('health', (data) => {
+			console.log(data);
 		})
 	}
 

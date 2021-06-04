@@ -10,7 +10,7 @@ import {
 	increment,
 } from '../../store/reducers/counterSlice'
 
-const MODE_LOCAL = 'local'
+// const MODE_CLIENT = 'client'
 
 class playerObject extends GameObject {
 
@@ -113,11 +113,10 @@ class playerObject extends GameObject {
 			}
 		}
 		if (nextScene != null) {
-	        // this.scene.switchScene(nextScene);
 	        console.log("should switch to scene: " + nextScene);
-	        if (this.scene.engine.mode == MODE_LOCAL) {
-	        	this.scene.switchScene(nextScene)
-	        }
+	        // if (this.scene.engine.mode == MODE_CLIENT) {
+	        // 	this.scene.switchScene(nextScene)
+	        // }
 
 		}
 
